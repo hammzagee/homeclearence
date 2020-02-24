@@ -96,10 +96,10 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'safi',
+        'NAME': 'heroku_500131c11907d8c',
         'USER': 'b24e9f4bae18e4',
         'PASSWORD': '0bf30d6c',
-        'HOST': 'eu-cdbr-west-02.cleardb.net',  
+        'HOST': 'eu-cdbr-west-02.cleardb.net',
         'PORT': '3306',
     }
 }
