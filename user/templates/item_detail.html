@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<!-- Page Content -->
+<br><br><br>
+<div style="background-color:#e3f2fd;border-radius:10px; padding:40px; padding-bottom:170px"class="container">
+
+<!-- Portfolio Item Heading -->
+    <h1 class="my-4">{{item.title}}</h1>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+      <div class="col-md-7">
+        <img style="border-radius:5px;"class="img-fluid" src="{{item.image.url}}" width="500px" height="400px"  alt="">
+      </div>
+
+      <div style="background-color:#96d3ff;border-radius:5px;padding:20px;"class="col-md-5">
+        <h3 class="my-3">Item Description</h3>
+        <h5>{{item.description}}</h5>
+        <hr>
+        <h4>Starting Bid: {{item.starting_bid}}</h4>
+        <h4 id="currentBid">Current Bid: {{bid}}</h4>
+        <input style="border-radius:5px;height:34px;width:335px;font-size:20px;text-align:center"type="number" name="bid" id="bid" min="{{bid}}" value="{{bid}}">
+        <button id="bidbtn" style="background-color: #e3f2fd;margin-bottom:5px;width:80px" type="button" class="btn btn-light">Bid</button><br><br>
+        <button style="background-color: #e3f2fd;" type="button" id="buy" class="btn btn-light btn-lg">Buy Now</button>
+      </div>
+
+    </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $("#bidbtn").click(function(event) {
+      var userID = 0;
+      {% if request.user.is_authenticated %}
+         userID = {{request.user.id}}
+      {%endif%}
+      var get_bid= $('#bid').val();
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      $.ajax({
+        url: '/makebid',
+        headers: {'X-CSRFToken': csrftoken,
+        'credentials': 'include',
+      },
+        type: 'POST',
+        data: {item_id: {{item.id}}, bid:get_bid, user_id: userID}
+      })
+      .done(function(data) {
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": true,
+          "progressBar": true,
+          "positionClass": "toast-bottom-full-width",
+          "preventDuplicates": true,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
+        toastr["success"](data, "Bid Placed")
+        $("#currentBid").text("Current Bid: " + get_bid +".0")
+      })
+      .fail(function() {
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": true,
+          "progressBar": true,
+          "positionClass": "toast-bottom-full-width",
+          "preventDuplicates": true,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
+        toastr["error"]("Please Login to Place your Bid", "Login Required")
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
+    });
+  });
+</script>
+{% endblock %}

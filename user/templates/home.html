@@ -1,5 +1,5 @@
 {% extends 'base.html'%}
-
+{% load static %}
 {% block content%}
 
 <div class="container">
@@ -16,7 +16,7 @@
             </div>
           </form>
           <div class="col-md-6 col-md-offset-3">
-            <button style="background-color: #96d3ff;" type="button" class="btn btn-light"><i style="margin-right:10px" class="fa fa-map-marker" aria-hidden="true"></i> Nearby Items</button>
+            <button id="getCurrentLocation" onclick="getLocation()" style="background-color: #96d3ff;" type="button" class="btn btn-light"><i style="margin-right:10px" class="fa fa-map-marker" aria-hidden="true"></i> Nearby Items</button>
           </div>
         </div>
   </div>
@@ -25,12 +25,12 @@
       {% if forloop.counter|divisibleby:3 %}
       {% endif%}
       <div class="col-lg-4">
-        <div style="border:1px solid #ebebeb;border-radius:3px;background-color:#e3f2fd;padding:20px;text-align:center;">
-          <img src="{{ item.image.url }}" width="310px" height="200px" alt="" style="position:relative;">
+       <div style="border:1px solid #ebebeb;border-radius:3px;background-color:#e3f2fd;padding:20px;text-align:center;">
+          <a href="{% url 'itemDetail' item.id%}"><img src="{{ item.image.url }}" width="310px" height="200px" alt="" style="position:relative;"></a>
           <h4 style="text-align:left"><b>{{item.title}}</b></h4>
           <h5 style="text-align:left">{{item.description}}</h6>
           <h5 style="text-align:left"><b>Current Bid: £ {{item.current_bid}}</b></h5>
-          <button style="background-color: #96d3ff;" type="button" class="btn btn-light">Buy Now</button>
+          <button style="background-color: #96d3ff;" type="button" id="{{item.id}}" class="btn btn-light buyNow">Buy Now</button>
         </div>
       </div>
       {% if forloop.counter|divisibleby:3 %}
@@ -38,4 +38,32 @@
       {% endif%}
     {% endfor%}
 </div>
+
+<script src="{% static '/js/maps.js'%}"></script>
+
+<script>
+  $(document).ready(function() {
+    $(".buyNow").click(function(event) {
+      
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-full-width",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      toastr["error"]("Please Login to Place your Bid", "Login Required")
+    });
+  });
+</script>
 {% endblock%}

@@ -1,0 +1,171 @@
+/* [Master Stylesheet v1.0] */
+/* :: 1.0 Import Fonts */
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+/* :: 2.0 Import All CSS */
+@import url(css/bootstrap.min.css);
+/* @import url(css/animista.css); */
+
+
+/* :: 3.0 Base CSS */
+* {
+  margin: 0;
+  padding: 0; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  /* font-size: 14px; */
+  /* font-weight: bold; */
+  /* background-color:#fff; */
+ }
+
+ .classes {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: absolute;
+   width: 100%;
+   height: 100vh;
+ }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #96d3ff;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.3;
+  font-weight: 700; }
+
+p {
+  font-family: "Montserrat", sans-serif;
+  color: ##96d3ff;
+  font-size: 14px;
+  line-height: 1.8;
+  font-weight: bold; }
+
+a,
+a:hover,
+a:focus {
+  -webkit-transition-duration: 500ms;
+  transition-duration: 500ms;
+  text-decoration: none;
+  outline: 0 solid transparent;
+  /* color: rgba(0, 0, 0, 0.8); */
+  /* font-weight: 600; */
+  font-size: 14px; }
+
+ul,
+ol {
+  margin: 0; }
+  ul li,
+  ol li {
+    list-style: none; }
+
+img {
+  height: auto;
+  max-width: 100%; }
+
+
+/* :: 7.0 Courses Area */
+.popular-courses-area {
+  position: relative;
+  z-index: 1;
+  background-repeat: repeat; }
+
+.cards{
+  background-color: #96d3ff;
+  margin:30px 30px;
+  border-radius: 6px;
+}
+.cards h4{
+  color: white;
+  padding:10px 0 0 15px;
+  text-align: left;
+  margin-bottom: 10px;
+}
+.cards .border{
+  height:1px;
+  margin:0 10px;
+  background-color: #e2e6ff;
+}
+.cards h1{
+  color:white;
+  text-align: center;
+}
+tbody{
+  border:1px solid #dee2e6;
+}
+table thead{
+  background-color: #96d3ff;
+  color:white;
+  font-weight: bold;
+}
+table th, table td{
+  border-right:1px solid #dee2e6;
+  text-align: center;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+label{
+  margin-bottom: 0;
+
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #96d3ff;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

@@ -1,0 +1,204 @@
+{%  extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <link rel="stylesheet" href=" {% static "/css/style.css" %} ">
+</head>
+
+<body>
+  <section class="popular-courses-area">
+    <div style="padding-top:100px;padding-bottom: 100px;background-color:#e3f2fd; border-radius:5px;" class="container">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="cards">
+            <h4>Total Listed Items</h4>
+            <div class="border">
+            </div>
+            <h1>{{itemsListed.count}}</h1>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="cards">
+            <h4>Total Items Bought</h4>
+            <div class="border">
+            </div>
+            <h1>{{items.count}}</h1>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="cards">
+            <h4>Total Items Sold</h4>
+            <div class="border">
+            </div>
+            <h1>{{itemsSold}}</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+<br><br><br>
+    <div class="row" style="margin-left:0px;margin-right:0px; padding-top:100px;padding-bottom: 100px;background-color:#e3f2fd; border-radius:5px;padding:50px;">
+      <div class="col-lg-6">
+        <h2>Listed Items</h2>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Current Bid</th>
+                <th scope="col">Bidding</th>
+                <th scope="col">Sold</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if itemsListed.count > 0 %}
+                  {% for item in itemsListed %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{item.title}}</td>
+                    {% if item.itemstatus.bid %}
+                    <td>{{item.itemstatus.bid}}</td>
+                    {% else %}
+                    <td>No Bids Yet</td>
+                    {% endif %}
+                    {% if item.bidding %}
+                    <td>
+                      <label class="switch">
+                        <input class="bidding" id="{{item.id}}" type="checkbox" checked><span class="slider round"></span>
+                      </label>
+                    </td>
+                    {% else %}
+                    <td>
+                      <label class="switch">
+                        <input class="bidding" id="{{item.id}}" type="checkbox" disabled><span class="slider round"></span>
+                      </label>
+                    </td>
+                    {% endif %}
+                    {% if item.itemstatus.sold %}
+                    <td>Yes</td>
+                    {% else %}
+                    <td>No</td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+              {% else %}
+                <tr>
+                  <td  colspan="5">No Item Listed</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <h2>Items Bought</h2>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Bid</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {% if items.count > 0 %}
+                {% for item in items %}
+                    <tr>
+                      <th scope="row">{{forloop.counter}}</th>
+                      <td>{{item.title}}</td>
+                      <td>{{item.itemstatus.bid}}</td>
+                    </tr>
+                {% endfor %}
+              {% else %}
+              <tr>
+                <td  colspan="3">No Item Bought</td>
+              </tr>
+              {% endif %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</body>
+
+<script>
+  $(document).ready(function() {
+    $(".bidding").click(function(event) {
+      var itemID = $(this).attr('id');
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var ask = confirm("Do you want to stop bidding for this item? (stopping bid will also sell this item to highest bidder)");
+      if (ask) {
+        $.ajax({
+          url: '/stopBid',
+          type: 'POST',
+          headers: {'X-CSRFToken': csrftoken},
+          data: {item_id: itemID},
+        })
+        .done(function(data) {
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          }
+          toastr["success"](data, "Bidding Stoped");
+        })
+        .fail(function(data) {
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          }
+          toastr["error"]("No One has Placed a Bid on Your Item yet", "Failed");
+        })
+      }
+      else {
+        event.preventDefault();
+      }
+
+    });
+  });
+</script>
+</html>
+
+
+{% endblock %}
