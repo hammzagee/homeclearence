@@ -149,8 +149,8 @@
 							{% if value == 'username'%}
 								toastr["warning"]("Username already exists", "Invalid Input")
 							{% endif %}
-							{% if value == 'password1' or value == 'password2'%}
-								toastr["warning"]("Password Mis-match", "Invalid Input")
+							{% if value == 'password2'%}
+								toastr["warning"]("Chose Strong Password", "Invalid Input")
 							{% endif %}
 					});
 			</script>

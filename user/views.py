@@ -10,8 +10,17 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from django.contrib import messages
 from .models import *
 
+
+def search(request):
+    search =request.GET.get('search')
+    if request.user.is_authenticated:
+        result = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filter(title__contains=search)
+    else:
+        result = Item.objects.filter(bidding = True).filter(title__contains=search)
+    return render(request,'home.html',{"items":result})
 
 def home(request):
     if request.user.is_authenticated:
@@ -123,6 +132,7 @@ def addItem(request):
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
         location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'])
         item.save()     #creating the item from the form atttributes
+        messages.success(request, 'Item Successfully Listed')
         return redirect('dashboard')
     return render(request, 'addItem.html',{})
 
@@ -169,7 +179,8 @@ def signup(request):
             email = EmailMessage(mail_subject, message, to=[to_email])  #sending email to verify the account
             email.send()
             return render(request,'email_verified.html', {})
-
+        else:
+            print(form.errors)
     else:
         form = SignupForm()
 

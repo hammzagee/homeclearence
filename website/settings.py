@@ -87,22 +87,22 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'safi',
-    #     'USER': 'root',
-    #     'PASSWORD': 'root',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306',
-    # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'heroku_500131c11907d8c',
-        'USER': 'b24e9f4bae18e4',
-        'PASSWORD': '0bf30d6c',
-        'HOST': 'eu-cdbr-west-02.cleardb.net',
+        'NAME': 'safi',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'heroku_500131c11907d8c',
+    #     'USER': 'b24e9f4bae18e4',
+    #     'PASSWORD': '0bf30d6c',
+    #     'HOST': 'eu-cdbr-west-02.cleardb.net',
+    #     'PORT': '3306',
+    # }
 }
 
 
