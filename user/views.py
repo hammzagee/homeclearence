@@ -123,6 +123,7 @@ def addItem(request):
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
         location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'])
         item.save()     #creating the item from the form atttributes
+        return redirect('dashboard')
     return render(request, 'addItem.html',{})
 
 
