@@ -8,6 +8,8 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('makebid', views.makeBid, name='makeBid'),
     path('stopBid', views.stopBid, name='stopBid'),
+    path('buyNow', views.buyNow, name='buyNow'),
+    path('addItem/', views.addItem, name='addItem'),
     path('item/<str:pk>', views.item_detail, name='itemDetail'),
     path('activate/<uidb64>/<token>/',
         views.activate, name='activate'),

@@ -30,8 +30,8 @@ ALLOWED_HOSTS = ['127.0.0.1', 'clearence.herokuapp.com']
 #Email server configurations
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ameerhamza010@gmail.com'
-EMAIL_HOST_PASSWORD = 'intothedeep'
+EMAIL_HOST_USER = 'maazb9545@gmail.com'
+EMAIL_HOST_PASSWORD = 'loveyourself10'
 EMAIL_PORT = 587
 
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #own apps
     'user',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

@@ -8,7 +8,7 @@
 
 <!-- Page Content -->
 <br><br><br>
-<div style="background-color:#e3f2fd;border-radius:10px; padding:40px; padding-bottom:170px"class="container">
+<div style="background-color:#e3f2fd;border-radius:10px; padding:40px; padding-bottom:170px; margin-bottom:100px"class="container">
 
 <!-- Portfolio Item Heading -->
     <h1 class="my-4">{{item.title}}</h1>
@@ -23,16 +23,34 @@
         <h3 class="my-3">Item Description</h3>
         <h5>{{item.description}}</h5>
         <hr>
-        <h4>Starting Bid: {{item.starting_bid}}</h4>
-        <h4 id="currentBid">Current Bid: {{bid}}</h4>
+        <h4>Starting Bid: £{{item.starting_bid}}</h4>
+        <h4 id="currentBid">Current Bid: £{{bid}}</h4>
         <input style="border-radius:5px;height:34px;width:335px;font-size:20px;text-align:center"type="number" name="bid" id="bid" min="{{bid}}" value="{{bid}}">
         <button id="bidbtn" style="background-color: #e3f2fd;margin-bottom:5px;width:80px" type="button" class="btn btn-light">Bid</button><br><br>
-        <button style="background-color: #e3f2fd;" type="button" id="buy" class="btn btn-light btn-lg">Buy Now</button>
+        <button style="background-color: #e3f2fd;" type="button" id="{{item.id}}" class="btn btn-light btn-lg buyNow">Buy Now</button>
       </div>
 
+      <div class="col-md-12" style="padding-top:100px">
+        <hr style="border: 1px solid #96d3ff; border-radius:5px;">
+        <br><br>
+        <h3><strong>Related Products</strong></h3>
+        <br>
+        <br>
+          <div class="row" style="border-radius:5px;">
+            {% for item in items %}
+              <div class="col-lg-4">
+                <div style="border:5px solid #96d3ff;border-radius:3px;background-color:#96d3ff;padding:20px;text-align:center;">
+                  <a href="{% url 'itemDetail' item.id%}"><img src="{{ item.image.url }}" width="300px" height="200px" alt="" style="position:relative; border-radius:5px;"></a>
+                  <h3>{{item.title}}</h3>
+                </div>
+              </div>
+            {% endfor %}
+            </div>
+          </div>
+      </div>
     </div>
-</div>
 
+</div>
 <script>
   $(document).ready(function() {
     $("#bidbtn").click(function(event) {
@@ -95,6 +113,90 @@
         console.log("complete");
       });
 
+    });
+  });
+</script>
+<script>
+  $(document).ready(function() {
+    $(".buyNow").click(function(event) {
+      var userID = 0;
+      {% if request.user.is_authenticated %}
+         userID = {{request.user.id}}
+         toastr.options = {
+           "closeButton": false,
+           "debug": false,
+           "newestOnTop": true,
+           "progressBar": true,
+           "positionClass": "toast-bottom-full-width",
+           "preventDuplicates": true,
+           "onclick": null,
+           "showDuration": "300",
+           "hideDuration": "1000",
+           "timeOut": "5000",
+           "extendedTimeOut": "1000",
+           "showEasing": "swing",
+           "hideEasing": "linear",
+           "showMethod": "fadeIn",
+           "hideMethod": "fadeOut"
+         }
+         toastr["success"]("Please wait while we are sending you an email for further Instructions", "Processing")
+      {%endif%}
+      var itemID = $(this).attr('id');
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var ask = confirm("Do you want to Buy This Product?");
+      if (ask) {
+        $.ajax({
+          url: '/buyNow',
+          type: 'POST',
+          headers: {'X-CSRFToken': csrftoken,
+          'credentials': 'include',
+        },
+        data: {item_id:itemID , user_id:userID}
+      })
+      .done(function(data) {
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": true,
+          "progressBar": true,
+          "positionClass": "toast-bottom-full-width",
+          "preventDuplicates": true,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
+        toastr["success"](data, "Item Bought")
+      })
+      .fail(function(data) {
+        toastr.options = {
+          "closeButton": false,
+          "debug": false,
+          "newestOnTop": true,
+          "progressBar": true,
+          "positionClass": "toast-bottom-full-width",
+          "preventDuplicates": true,
+          "onclick": null,
+          "showDuration": "300",
+          "hideDuration": "1000",
+          "timeOut": "5000",
+          "extendedTimeOut": "1000",
+          "showEasing": "swing",
+          "hideEasing": "linear",
+          "showMethod": "fadeIn",
+          "hideMethod": "fadeOut"
+        }
+        toastr["error"]("Please Login to Buy This Product", "Login Required")
+      });
+      }
+      else {
+        event.preventDefault();
+      }
     });
   });
 </script>

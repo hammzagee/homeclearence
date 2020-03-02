@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<br><br><br>
+<div style="background-color:#e3f2fd;border-radius:10px; padding:40px; padding-bottom:170px"class="container">
+
+<!-- Portfolio Item Heading -->
+    <h1 class="my-4">Add Item</h1>
+    <br><br>
+    <!-- Portfolio Item Row -->
+    <div class="row">
+      <div class="container" style="padding-left:200px">
+        <form method="POST" action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group row">
+            <label for="title" class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="title" id="title" placeholder="Title" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Descriptioin</label>
+            <div class="col-sm-5">
+              <textarea class="form-control" id="description" name="description" placeholder="Describe the item in few words"></textarea>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="starting_bid" class="col-sm-2 col-form-label">Starting Bid</label>
+            <div class="col-sm-5">
+              <input type="number" min="0" class="form-control" name="starting_bid" id="starting_bid"  placeholder="Starting bid" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="location" class="col-sm-2 col-form-label">Location</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="location" id="location" placeholder="Location" required>
+            </div>
+            <button id="getCurrentLocation" title="use current location" onclick="getLocation()" style="background-color: #96d3ff;" type="button" class="btn btn-light"><i class="fa fa-map-marker" aria-hidden="true"></i></button>
+          </div>
+          <div class="form-group row">
+            <label for="lat" class="col-sm-2 col-form-label">Latitude</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="lat" id="lat" value="31.233" placeholder="Automatically detected based upon location" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="lng" class="col-sm-2 col-form-label">Longitude</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" name="lng" id="lng" value="74.322" placeholder="Automatically detected based upon location" readonly>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="image" class="col-sm-2 col-form-label">Image</label>
+            <div class="col-sm-5">
+              <input type="file" class="form-control" name="image" id="image" placeholder="Item Image" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-10" style="text-align: right">
+              <button type="submit" class="btn btn-light" style="background-color: #96d3ff;">Add Item</button>
+            </div>
+          </div>
+      </form>
+
+      </div>
+    </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $('#location').keyup(function(event) {
+      var loc = $(this).val()
+      $.ajax({
+        url: 'https://maps.googleapis.com/maps/api/geocode/json',
+        type: 'GET',
+        data: {address: loc, key:'AIzaSyBMRHkWz5dtdLAXc7sKu0zIhvvtsWZ2oDM'}
+      })
+      .done(function(results) {
+        $('#lat').val(results.results[0].geometry.location.lat)
+        $('#lng').val(results.results[0].geometry.location.lng)
+      });
+    });
+  });
+</script>
+
+
+<script>
+var x = document.getElementById("getCurrentLocation");
+
+function getLocation() {
+    var options = {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0
+  };
+  function error(err) {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+}
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition,error,options);
+  } else {
+    console.log("Geolocation is not supported by this browser.")
+  }
+}
+
+function showPosition(position) {
+  $('#lat').val(position.coords.latitude)
+  $('#lng').val(position.coords.longitude)
+  codeLatLng(position.coords.latitude,position.coords.longitude)
+}
+
+function codeLatLng(lat, lng) {
+  geocoder = new google.maps.Geocoder();
+  var latlng = new google.maps.LatLng(lat, lng);
+  geocoder.geocode({
+    'latLng': latlng
+  }, function (results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      if (results[1]) {
+        console.log(results);
+        $('#location').val(results[1].formatted_address)
+      } else {
+        alert('No results found');
+      }
+    } else {
+      alert('Geocoder failed due to: ' + status);
+    }
+  });
+}
+</script>
+
+
+{% endblock %}
