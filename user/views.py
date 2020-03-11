@@ -144,6 +144,11 @@ def dashboard(request):
     items = Item.objects.filter(itemstatus__user_id = request.user.id).filter(itemstatus__sold = True)  #items for the user
     return render(request, 'dashboard.html', {"itemsListed":itemsListed, "items":items, "itemsSold": itemsSold})
 
+def remove_item(request,pk):
+    item = Item.objects.get(id=pk)
+    item.delete()
+    return HttpResponse("Item Successfully Removed from Listing")
+
 def item_detail(request, pk):
     if request.user.is_authenticated:
         items = Item.objects.exclude(id=pk).exclude(User_id = request.user.id).filter(bidding = True).order_by('id')[:3]    #excluding user listed items from related items
@@ -153,9 +158,9 @@ def item_detail(request, pk):
     try:
         item.itemstatus.bid
     except ItemStatus.DoesNotExist:
-        bid = item.starting_bid + 1 #adding 1 to starting bid if no one has bid yet
+        bid = item.starting_bid  #adding 1 to starting bid if no one has bid yet
     else:
-        bid = item.itemstatus.bid + 1 #adding one to previous bid
+        bid = item.itemstatus.bid #adding one to previous bid
     return render(request, 'item_detail.html',{"item" : item, "bid":bid, "items":items})
 
 

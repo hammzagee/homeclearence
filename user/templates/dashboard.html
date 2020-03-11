@@ -58,6 +58,7 @@
                 <th scope="col">Current Bid</th>
                 <th scope="col">Bidding</th>
                 <th scope="col">Sold</th>
+                <th scope="col">Remove</th>
               </tr>
             </thead>
             <tbody>
@@ -86,8 +87,10 @@
                     {% endif %}
                     {% if item.itemstatus.sold %}
                     <td>Yes</td>
+                    <td><i style="color:green;font-size:20px" class="fa fa-ban"</i></td>
                     {% else %}
                     <td>No</td>
+                    <td> <span  class="remove" id="{{item.id}}"><i style="font-size:20px" class="fa fa-trash-o"></span></i></td>
                     {% endif %}
                   </tr>
                   {% endfor %}
@@ -136,6 +139,66 @@
 
   </section>
 </body>
+
+<script>
+  $(document).ready(function() {
+    $(".remove").click(function(event) {
+      var itemID = $(this).attr('id');
+      var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+      var ask = confirm("Do you want remove the item from listing?");
+      if (ask) {
+        $.ajax({
+          url: '/item/'+itemID+'/delete',
+          type: 'DELETE',
+          headers: {'X-CSRFToken': csrftoken},
+        })
+        .done(function(data) {
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          }
+          toastr["success"](data, "Removed");
+        })
+        .fail(function() {
+          toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+          }
+          toastr["error"]("There Was an error", "Failed");
+        });
+      }
+      else {
+          event.preventDefault();
+      }
+    });
+  });
+</script>
 
 <script>
   $(document).ready(function() {

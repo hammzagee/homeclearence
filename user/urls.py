@@ -12,6 +12,7 @@ urlpatterns = [
     path('buyNow', views.buyNow, name='buyNow'),
     path('addItem/', views.addItem, name='addItem'),
     path('item/<str:pk>', views.item_detail, name='itemDetail'),
+    path('item/<str:pk>/delete', views.remove_item, name='itemRemove'),
     path('activate/<uidb64>/<token>/',
         views.activate, name='activate'),
 ]
