@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 # Create your models here.
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.user.username
 
 class Item(models.Model):
     User = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
@@ -23,5 +29,5 @@ class ItemStatus(models.Model):
     bid = models.FloatField()
     sold = models.BooleanField(default=False)
 
-    # def __str__(self):
-    #     return self.item.title
+    def __str__(self):
+        return self.item.title

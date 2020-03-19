@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, ItemForm
+from .forms import SignupForm, ItemForm, ProfileForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -167,11 +167,15 @@ def item_detail(request, pk):
 
 def signup(request):
     if request.method == 'POST':
+        print(request.POST.get('phone'))
         form = SignupForm(request.POST)
+        profileForm = ProfileForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
+            profile = Profile(user = user, phone=request.POST.get('phone'))
             user.save()
+            profile.save()
             current_site = get_current_site(request)
             message = render_to_string('acc_active_email.html', {
                 'user':user,
@@ -188,8 +192,9 @@ def signup(request):
             print(form.errors)
     else:
         form = SignupForm()
+        profileForm = ProfileForm()
 
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'signup.html', {'form': form, 'profile':profileForm})
 
 def activate(request, uidb64, token):
     try:
