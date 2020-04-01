@@ -22,4 +22,4 @@ class ItemForm(ModelForm):
     class Meta:
         model = Item
         fields = ('title', 'description', 'location',
-                  'lat', 'lng', 'starting_bid', 'image')
+                  'lat', 'lng', 'starting_bid', 'image', 'buyNow',)

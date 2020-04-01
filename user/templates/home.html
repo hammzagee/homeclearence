@@ -46,11 +46,11 @@
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="background-color:#96d3ff; padding:7px; border-radius:3px;"><a href="{% url 'itemDetail' item.id%}"><font color="black">Bid</font></a></span></h5>
                         {% else %}
                         <h5 style="text-align:left"><b>Current Bid: £ {{item.starting_bid}}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:#96d3ff; padding:7px; border-radius:3px;"><a href="{% url 'itemDetail' item.id%}"><font color="black">Bid</font></a></span></h5> 
+                          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:#96d3ff; padding:7px; border-radius:3px;"><a href="{% url 'itemDetail' item.id%}"><font color="black">Bid</font></a></span></h5>
                         {% endif %}
                         <br>
                         <br>
-                        <button style="background-color: #96d3ff;" type="button" id="{{item.id}}" class="btn btn-light buyNow">Buy On Cash</button>
+                        <button style="background-color: #96d3ff;" type="button" id="{{item.id}}" class="btn btn-light buyNow">Buy On Cash (£{{item.buyNow}})</button>
                 </div>
             </div>
             {% if forloop.counter|divisibleby:3 %}

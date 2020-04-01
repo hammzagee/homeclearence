@@ -92,14 +92,14 @@ def buyNow(request):
         except ItemStatus.DoesNotExist:
             newItem = ItemStatus(bid=item.starting_bid, item_id=item_id, user_id=request.POST.get("user_id"),sold=True)
             item.bidding = False
-            price = item.starting_bid
+            price = item.buyNow
             item.save()
             newItem.save()
         else:
             itemstatus.user_id = request.POST.get("user_id")
             itemstatus.sold = True
             item.bidding = False
-            price = itemstatus.bid          #updating item status
+            price = item.buyNow        #updating item status
             item.save()
             itemstatus.save()
         buyermessage = render_to_string('buyer.html', {
@@ -130,7 +130,7 @@ def addItem(request):
     user=request.user
     if request.method == 'POST':
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
-        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'])
+        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'], buyNow=request.POST.get('buyNow'))
         item.save()     #creating the item from the form atttributes
         messages.success(request, 'Item Successfully Listed')
         return redirect('dashboard')

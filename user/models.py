@@ -19,6 +19,7 @@ class Item(models.Model):
     lng = models.FloatField()
     image = models.ImageField(null=True, blank = True)
     bidding = models.BooleanField(default=True)
+    buyNow = models.FloatField()
 
     def __str__(self):
         return self.title
