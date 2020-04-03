@@ -16,13 +16,18 @@ from .models import *
 
 def search(request):
     search =request.GET.get('search')
-    if request.user.is_authenticated:
+    if request.user.is_authenticated:   #item searched based on keywords
         result = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filter(title__contains=search)
     else:
         result = Item.objects.filter(bidding = True).filter(title__contains=search)
     return render(request,'home.html',{"items":result})
 
 def home(request):
+    chk = Item.objects.filter(bidding=True)
+    for it in chk:
+        c = it.bidding_end_data-it.created_at
+        if c.days == 0:
+            expTime(it.id)
     if request.user.is_authenticated:
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True)
     else:
@@ -45,11 +50,56 @@ def makeBid(request):
             newItem = ItemStatus(bid=bid, item_id=item_id, user_id=request.POST.get("user_id"),sold=False)
             newItem.save()
         else:
+            item = Item.objects.get(id = item_id)
+            u = User.objects.get(id = itemstatus.user_id)
+            bidreplace = render_to_string('bidReplaced.html',{
+                'bid': bid,
+                'user': u,
+                'item':item,
+            })
+            mail_subject = 'You Bid on '+ item.title + 'was replaced'
+            print("im here")
+            email = u.email
+            _email = EmailMessage(mail_subject, bidreplace, to=[email])
+            _email.send()
+            itemstatus.user_id = request.POST.get("user_id")
             itemstatus.bid = bid                #updating bid for item
             itemstatus.save()
         return HttpResponse("Your Bid is Successfully Placed!")
     else:
         return HttpResponse(status=500)
+
+def expTime(item_id):
+    item = Item.objects.get(id=item_id)
+    try:
+        itemstatus = ItemStatus.objects.get(item_id = item_id)          #checking if someone has made a bid on item
+    except ItemStatus.DoesNotExist:
+        item.bidding = False
+        item.save()
+        return True
+    else:
+        if itemstatus.sold == True:
+            return True
+        else:
+            user = User.objects.get(id=itemstatus.user_id)
+            contact = User.objects.get(id = item.User_id)
+            itemstatus.sold = True                              #updating stataus
+            itemstatus.save()
+            item.bidding = False
+            item.save()
+            price = itemstatus.bid
+            buyermessage = render_to_string('buyer.html', {     #sending the highest bidder an email that item is sold to you
+                'user':user,
+                'contact': contact,
+                'price': price,
+                'item': item,
+            })
+            buyer_mail_subject = 'You had highest bid, Item was sold to you'
+            buyer_to_email = user.email
+            buyer_email = EmailMessage(buyer_mail_subject, buyermessage, to=[buyer_to_email])
+            buyer_email.send()
+            return True
+
 
 def stopBid(request):
     item_id = request.POST.get("item_id")
@@ -69,7 +119,7 @@ def stopBid(request):
             item.bidding = False
             item.save()
             price = itemstatus.bid
-            buyermessage = render_to_string('buyer.html', {
+            buyermessage = render_to_string('buyer.html', {     #sending the highest bidder an email that item is sold to you
                 'user':user,
                 'contact': contact,
                 'price': price,
@@ -102,13 +152,13 @@ def buyNow(request):
             price = item.buyNow        #updating item status
             item.save()
             itemstatus.save()
-        buyermessage = render_to_string('buyer.html', {
+        buyermessage = render_to_string('buyer.html', {         #sending the email to buyer for further details
             'user':user,
             'contact': contact,
             'price': price,
             'item': item,
         })
-        sellermessage = render_to_string('seller.html', {
+        sellermessage = render_to_string('seller.html', {       #sending seller email for the news of item sold
             'user':user,
             'contact': contact,
             'price': price,
@@ -130,7 +180,8 @@ def addItem(request):
     user=request.user
     if request.method == 'POST':
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
-        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'], buyNow=request.POST.get('buyNow'))
+        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
+        buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'))
         item.save()     #creating the item from the form atttributes
         messages.success(request, 'Item Successfully Listed')
         return redirect('dashboard')
@@ -153,7 +204,7 @@ def item_detail(request, pk):
     if request.user.is_authenticated:
         items = Item.objects.exclude(id=pk).exclude(User_id = request.user.id).filter(bidding = True).order_by('id')[:3]    #excluding user listed items from related items
     else:
-        items = Item.objects.filter(bidding = True).exclude(id=pk).order_by('?')[:3]    #related Items
+        items = Item.objects.filter(bidding = True).exclude(id=pk).order_by('?')[:3]    #related Items in the suggestions
     item = Item.objects.get(id=pk)
     try:
         item.itemstatus.bid
@@ -161,13 +212,14 @@ def item_detail(request, pk):
         bid = item.starting_bid  #adding 1 to starting bid if no one has bid yet
     else:
         bid = item.itemstatus.bid #adding one to previous bid
-    return render(request, 'item_detail.html',{"item" : item, "bid":bid, "items":items})
+
+    days = item.bidding_end_data-item.created_at
+    return render(request, 'item_detail.html',{"item" : item, "bid":bid, "items":items, "days":days})
 
 
 
-def signup(request):
+def signup(request): #registering the user
     if request.method == 'POST':
-        print(request.POST.get('phone'))
         form = SignupForm(request.POST)
         profileForm = ProfileForm(request.POST)
         if form.is_valid():

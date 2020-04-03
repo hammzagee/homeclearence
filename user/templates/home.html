@@ -48,9 +48,11 @@
                         <h5 style="text-align:left"><b>Current Bid: £ {{item.starting_bid}}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background-color:#96d3ff; padding:7px; border-radius:3px;"><a href="{% url 'itemDetail' item.id%}"><font color="black">Bid</font></a></span></h5>
                         {% endif %}
-                        <br>
+                        <h5 style="text-align:left"><b>Bidding Ends On:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.bidding_end_data}}</b></h5>
                         <br>
                         <button style="background-color: #96d3ff;" type="button" id="{{item.id}}" class="btn btn-light buyNow">Buy On Cash (£{{item.buyNow}})</button>
+                        <br>
+                        <h6 style="text-align:right">(Posted {{item.created_at}})</h6>
                 </div>
             </div>
             {% if forloop.counter|divisibleby:3 %}

@@ -57,6 +57,12 @@
             </div>
           </div>
           <div class="form-group row">
+            <label for="bidding_end_data" class="col-sm-2 col-form-label">Bidding End Date</label>
+            <div class="col-sm-5">
+              <input type="date" class="form-control" name="bidding_end_data" id="bidding_end_data">
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="image" class="col-sm-2 col-form-label">Image</label>
             <div class="col-sm-5">
               <input type="file" class="form-control" name="image" id="image" placeholder="Item Image" required>
@@ -75,6 +81,7 @@
 
 <script>
   $(document).ready(function() {
+    getLocation()
     $('#location').keyup(function(event) {
       var loc = $(this).val()
       $.ajax({

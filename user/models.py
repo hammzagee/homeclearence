@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Create your models here.
 class Profile(models.Model):
@@ -20,6 +21,8 @@ class Item(models.Model):
     image = models.ImageField(null=True, blank = True)
     bidding = models.BooleanField(default=True)
     buyNow = models.FloatField()
+    created_at = models.DateField(auto_now_add=True)
+    bidding_end_data = models.DateField(default=now)
 
     def __str__(self):
         return self.title

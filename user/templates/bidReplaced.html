@@ -1,0 +1,7 @@
+{% autoescape off %}
+Hi {{ user.username }},
+Your bid on item {{item.title}} was replaced by a high bid of £ {{bid}}. 
+We are informing you so that if you want to bid higher go to following Link to make a Bid.
+
+http://{{ domain }}{% url 'itemDetail' item.id %} 
+{% endautoescape %}
