@@ -69,10 +69,13 @@ def makeBid(request):
     else:
         return HttpResponse(status=500)
 
+
+# This Function is used to remove the items which have expired the bidding timeself.
+# exp can be selling the item to highest bidder if any or just removing from platform if there are no bids
 def expTime(item_id):
     item = Item.objects.get(id=item_id)
     try:
-        itemstatus = ItemStatus.objects.get(item_id = item_id)          #checking if someone has made a bid on item
+        itemstatus = ItemStatus.objects.get(item_id = item_id)
     except ItemStatus.DoesNotExist:
         item.bidding = False
         item.save()
@@ -101,6 +104,8 @@ def expTime(item_id):
             return True
 
 
+# This function is same as the above one but it is used when a user opt
+#to stop bidding ona product from dashboard
 def stopBid(request):
     item_id = request.POST.get("item_id")
     item = Item.objects.get(id = item_id)
@@ -131,6 +136,9 @@ def stopBid(request):
             buyer_email.send()
             return HttpResponse("Item Successfully Sold to Highest Bidder")
 
+
+#THis function is used when a user click buyNow and it sends email
+# both to buyer and seller for the futher insstructions
 def buyNow(request):
     if request.POST.get("user_id") != "0":
         user = User.objects.get(id=request.POST.get("user_id"))     #user who wants to buy item
@@ -176,6 +184,8 @@ def buyNow(request):
     else:
         return HttpResponse(status=500)
 
+
+#Used when user wants to list an item on platform
 def addItem(request):
     user=request.user
     if request.method == 'POST':
@@ -188,6 +198,7 @@ def addItem(request):
     return render(request, 'addItem.html',{})
 
 
+#dashboard Information for a authenticated user
 @login_required(login_url='login')
 def dashboard(request):
     itemsListed = Item.objects.filter(User_id = request.user.id)
@@ -195,17 +206,26 @@ def dashboard(request):
     items = Item.objects.filter(itemstatus__user_id = request.user.id).filter(itemstatus__sold = True)  #items for the user
     return render(request, 'dashboard.html', {"itemsListed":itemsListed, "items":items, "itemsSold": itemsSold})
 
+#if user wants to remove item from listing it is not same as stop bidding
 def remove_item(request,pk):
     item = Item.objects.get(id=pk)
     item.delete()
     return HttpResponse("Item Successfully Removed from Listing")
 
+
+#item details page information with related Items also
+# as of now all the items on the platform are of houseHold
+# So the related items are selected upon the number of views,
+# Views for a item increases whenever there is a click on it.
 def item_detail(request, pk):
     if request.user.is_authenticated:
         items = Item.objects.exclude(id=pk).exclude(User_id = request.user.id).filter(bidding = True).order_by('id')[:3]    #excluding user listed items from related items
     else:
-        items = Item.objects.filter(bidding = True).exclude(id=pk).order_by('?')[:3]    #related Items in the suggestions
+        items = Item.objects.filter(bidding = True).exclude(id=pk).order_by('-views')[:3]    #related Items in the suggestions
     item = Item.objects.get(id=pk)
+    v = item.views + 1
+    item.views = v
+    item.save()
     try:
         item.itemstatus.bid
     except ItemStatus.DoesNotExist:

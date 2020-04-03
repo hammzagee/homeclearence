@@ -23,6 +23,7 @@ class Item(models.Model):
     buyNow = models.FloatField()
     created_at = models.DateField(auto_now_add=True)
     bidding_end_data = models.DateField(default=now)
+    views = models.IntegerField()
 
     def __str__(self):
         return self.title
