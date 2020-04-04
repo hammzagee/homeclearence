@@ -29,9 +29,9 @@ def home(request):
         if c.days == 0:
             expTime(it.id)
     if request.user.is_authenticated:
-        items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True)
+        items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).order_by('-views')
     else:
-        items = Item.objects.filter(bidding = True)
+        items = Item.objects.filter(bidding = True).order_by('-views')
     return render(request, 'home.html', {"items":items})    #all the items that has bidding enabled
 
 def logout2(request):

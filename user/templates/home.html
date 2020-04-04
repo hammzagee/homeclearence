@@ -188,6 +188,7 @@
                 result += '<h5 style="text-align:left">{{item.description}}</h6>';
                 result += '<h5 style="text-align:left"><b>Current Bid: £ {{item.itemstatus.bid}}</b></h5>';
                 result += '<h5 style="text-align:left"><b>Current Bid: £ {{item.starting_bid}}</b></h5>';
+                result += '<h5 style="text-align:left"><b>Bidding Ends On:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.bidding_end_data}}</b></h5><br>';
                 result += '<h5 style="text-align:left"><b>Distance:' + dis.toFixed(2) + ' Miles</b></h5>';
                 result += '<button style="background-color: #96d3ff;" type="button" id="{{item.id}}" class="btn btn-light buyNow">Buy Now</button>';
                 result += '</div>';
