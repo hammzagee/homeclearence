@@ -71,7 +71,7 @@
             <div class="col-lg-4">
                 <div style="border:1px solid #ebebeb;border-radius:3px;background-color:#e3f2fd;padding:20px;text-align:center;">
                     <a href="{% url 'itemDetail' item.id%}"><img src="{{ item.image.url }}" width="310px" height="200px" alt="" style="position:relative;"></a>
-                    <h4 style="text-align:left"><b>{{item.title}}</b></h4>
+                    <a href="{% url 'itemDetail' item.id%}"><h4 style="text-align:left; color:black;"><b>{{item.title}}</b></h4></a>
                     <h5 style="text-align:left">{{item.description}}</h5>
                       <br>
                       <h5 style="text-align:left"><b>Used Duration:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.usedLife}}</b></h5>
