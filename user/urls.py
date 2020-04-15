@@ -3,6 +3,7 @@ from django.contrib.auth.views import LoginView
 from . import views
 urlpatterns = [
     path('', views.home, name='home'),
+    path('homeWCategory/<str:pk>', views.homeWithCategory, name='homeW'),
     path('signup/', views.signup, name='signup'),
     path('search/', views.search, name='search'),
     path('logout2/', views.logout2, name='logout2'),

@@ -23,9 +23,13 @@
         <h3 class="my-3">Item Description</h3>
         <h5>{{item.description}}</h5>
         <hr>
+        <h4>Used Duration: {{item.usedLife}}</h4>
+        <h4>Item Category: {{item.category}}</h4>
+        <hr>
         <h4>Starting Bid: £{{item.starting_bid}}</h4>
         <h4 id="currentBid">Current Bid: £{{bid}}</h4>
-        <h4>Bidding ends in <strong>{{days.days}}</strong> days</h4>
+        <hr>
+        <h4>Bidding ends in <strong style="font-size:32px;">{{days.days}}</strong>  days</h4>
         <input style="border-radius:5px;height:34px;width:335px;font-size:20px;text-align:center"type="number" name="bid" id="bid" min="{{bid}}" value="{{bid|add:1}}">
         <button id="bidbtn" style="background-color: #e3f2fd;margin-bottom:5px;width:80px" type="button" class="btn btn-light">Bid</button><br><br>
         <button style="background-color: #e3f2fd;" type="button" id="{{item.id}}" class="btn btn-light btn-lg buyNow">Buy On Cash (£{{item.buyNow}})</button>
@@ -33,7 +37,7 @@
       <div class="col-md-12" style="padding-top:100px">
         <hr style="border: 1px solid #96d3ff; border-radius:5px;">
         <br><br>
-        <h3><strong>Related Products</strong></h3>
+        <h3><strong>Common searched Products</strong></h3>
         <br>
         <br>
           <div class="row" style="border-radius:5px;">

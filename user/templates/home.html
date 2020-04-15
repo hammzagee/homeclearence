@@ -24,10 +24,43 @@
                 <button id="getCurrentLocation" title="10 Miles Radius" onclick="getLocation()" style="background-color: #96d3ff;" type="button" class="btn btn-light"><i style="margin-right:10px" class="fa fa-map-marker" aria-hidden="true"></i>
                     Nearby Items</button>
             </div>
+
         </div>
     </div>
     <br><br><br>
 
+    <div class="col-md-3 col-md-offset-4">
+        <select class="form-control" name="category" id="category">
+          {%if selected == 'none'%}
+          <option selected value="">---Item Category---</option>
+          {%else%}
+          <option value="">---Item Category---</option>
+          {%endif%}
+          {% if selected == "Furniture"%}
+            <option selected value="Furniture"> Furniture</option>
+          {% else%}
+            <option value="Furniture"> Furniture</option>
+          {% endif%}
+          {% if selected == "eFurniture"%}
+            <option selected value="eFurniture"> eFurniture</option>
+          {% else%}
+            <option value="eFurniture"> eFurniture</option>
+          {% endif%}
+          {% if selected == "Garden Furniture"%}
+            <option selected value="Garden Furniture"> Garden Furniture</option>
+          {% else%}
+            <option value="Garden Furniture"> Garden Furniture</option>
+          {% endif%}
+          {% if selected == "Other"%}
+            <option selected value="Other"> Other</option>
+          {% else%}
+            <option value="Other"> Other</option>
+          {% endif%}
+        </select>
+    </div>
+    <br>
+    <br>
+    <br>
     <div id="result">
 
         {% if items.count > 0 %}
@@ -39,8 +72,9 @@
                 <div style="border:1px solid #ebebeb;border-radius:3px;background-color:#e3f2fd;padding:20px;text-align:center;">
                     <a href="{% url 'itemDetail' item.id%}"><img src="{{ item.image.url }}" width="310px" height="200px" alt="" style="position:relative;"></a>
                     <h4 style="text-align:left"><b>{{item.title}}</b></h4>
-                    <h5 style="text-align:left">{{item.description}}</h6>
+                    <h5 style="text-align:left">{{item.description}}</h5>
                       <br>
+                      <h5 style="text-align:left"><b>Used Duration:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{item.usedLife}}</b></h5>
                         {% if item.itemstatus.bid %}
                         <h5 style="text-align:left"><b>Current Bid: £ {{item.itemstatus.bid}}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="background-color:#96d3ff; padding:7px; border-radius:3px;"><a href="{% url 'itemDetail' item.id%}"><font color="black">Bid</font></a></span></h5>
@@ -69,6 +103,23 @@
 </div>
 
 <script>
+$(document).ready(function() {
+  $('#category').change(function(event) {
+  val = $(this).val();
+    if (val == 'Furniture') {
+      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Furniture';
+    }
+    if (val == 'eFurniture') {
+      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'eFurniture';
+    }
+    if (val == 'Garden Furniture') {
+      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Garden Furniture';
+    }
+    if (val == 'Other') {
+      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Other';
+    }
+  });
+});
     $(document).ready(function() {
         $(".buyNow").click(function(event) {
             var userID = 0;

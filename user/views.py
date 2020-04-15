@@ -32,7 +32,19 @@ def home(request):
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).order_by('-views')
     else:
         items = Item.objects.filter(bidding = True).order_by('-views')
-    return render(request, 'home.html', {"items":items})    #all the items that has bidding enabled
+    return render(request, 'home.html', {"items":items, "selected":"none"})    #all the items that has bidding enabled
+
+def homeWithCategory(request, pk):
+    chk = Item.objects.filter(bidding=True)
+    for it in chk:
+        c = it.bidding_end_data-it.created_at
+        if c.days == 0:
+            expTime(it.id)
+    if request.user.is_authenticated:
+        items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filetr(category = pk).order_by('-views')
+    else:
+        items = Item.objects.filter(bidding = True).filter(category = pk).order_by('-views')
+    return render(request, 'home.html', {"items":items, "selected":pk})    #all the items that has bidding enabled
 
 def logout2(request):
     logout(request)
@@ -191,7 +203,8 @@ def addItem(request):
     if request.method == 'POST':
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
         location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
-        buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'))
+        buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
+        category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
         item.save()     #creating the item from the form atttributes
         messages.success(request, 'Item Successfully Listed')
         return redirect('dashboard')

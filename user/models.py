@@ -11,6 +11,12 @@ class Profile(models.Model):
         return self.user.username
 
 class Item(models.Model):
+    CATEGORY = (
+        ('Furniture', 'Furniture'),
+        ('eFurniture', 'eFurniture'),
+        ('Garden Furniture', 'Garden Furniture'),
+        ('Other', 'Other'),
+    )
     User = models.ForeignKey(User,null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.CharField(max_length=200, null=True, blank=True)
@@ -21,6 +27,8 @@ class Item(models.Model):
     image = models.ImageField(null=True, blank = True)
     bidding = models.BooleanField(default=True)
     buyNow = models.FloatField()
+    category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+    usedLife = models.CharField(max_length=200)
     created_at = models.DateField(auto_now_add=True)
     bidding_end_data = models.DateField(default=now)
     views = models.IntegerField(default=0)
