@@ -9,6 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
+from datetime import date
 from django.core.mail import EmailMessage
 from django.contrib import messages
 from .models import *
@@ -25,8 +26,7 @@ def search(request):
 def home(request):
     chk = Item.objects.filter(bidding=True)
     for it in chk:
-        c = it.bidding_end_data-it.created_at
-        if c.days == 0:
+        if it.bidding_end_data <= date.today():
             expTime(it.id)
     if request.user.is_authenticated:
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).order_by('-views')
@@ -37,8 +37,7 @@ def home(request):
 def homeWithCategory(request, pk):
     chk = Item.objects.filter(bidding=True)
     for it in chk:
-        c = it.bidding_end_data-it.created_at
-        if c.days == 0:
+        if it.bidding_end_data <= date.today():
             expTime(it.id)
     if request.user.is_authenticated:
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filetr(category = pk).order_by('-views')
@@ -94,6 +93,8 @@ def expTime(item_id):
         return True
     else:
         if itemstatus.sold == True:
+            item.bidding=False
+            item.save()
             return True
         else:
             user = User.objects.get(id=itemstatus.user_id)
