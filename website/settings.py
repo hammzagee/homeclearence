@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+from google.oauth2 import service_account
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -34,6 +34,9 @@ EMAIL_HOST_USER = 'maazb9545@gmail.com'
 EMAIL_HOST_PASSWORD = 'loveyourself10'
 EMAIL_PORT = 587
 
+GOOGLE_APPLICATION_CREDENTIALS=os.path.join(BASE_DIR,'creds.json')
+
+
 
 
 LOGIN_REDIRECT_URL = '/'
@@ -49,6 +52,7 @@ INSTALLED_APPS = [
     #own apps
     'user',
     'mathfilters',
+    'storages',
 ]
 
 MIDDLEWARE = [

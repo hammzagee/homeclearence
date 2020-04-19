@@ -5,6 +5,11 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+<style media="screen">
+  img:hover{
+    cursor: pointer;
+  }
+</style>
 
 <!-- Page Content -->
 <br><br><br>
@@ -16,7 +21,21 @@
     <!-- Portfolio Item Row -->
     <div class="row">
       <div class="col-md-7">
-        <img style="border-radius:5px;"class="img-fluid" src="{{item.image.url}}" width="500px" height="400px"  alt="">
+        <img style="border-radius:5px;"class="img-fluid" src="{{item.image.url}}" width="475px" height="400px"  alt="" id="expandedImg" >
+        <br><br><br>
+        {% if item.image1 and item.image2 and item.image3%}
+        <div class="row">
+          <div class="col-lg-3">
+            <img style="border-radius:5px;"class="img-fluid" src="{{item.image1.url}}" width="150px" height="100px"alt="Nature" onclick="myFunction(this);">
+          </div>
+          <div class="col-lg-3">
+            <img style="border-radius:5px;"class="img-fluid" src="{{item.image2.url}}" width="150px" height="100px"alt="Snow" onclick="myFunction(this);">
+          </div>
+          <div class="col-lg-3">
+            <img style="border-radius:5px;"class="img-fluid" src="{{item.image3.url}}" width="150px" height="100px"alt="Snow" onclick="myFunction(this);">
+          </div>
+        </div>
+        {% endif%}
       </div>
 
       <div style="background-color:#96d3ff;border-radius:5px;padding:20px;"class="col-md-5">
@@ -55,6 +74,15 @@
     </div>
 
 </div>
+<script>
+function myFunction(imgs) {
+var expandImg = document.getElementById("expandedImg");
+var imgText = document.getElementById("imgtext");
+expandImg.src = imgs.src;
+imgText.innerHTML = imgs.alt;
+expandImg.parentElement.style.display = "block";
+}
+</script>
 <script>
   $(document).ready(function() {
     $("#bidbtn").click(function(event) {

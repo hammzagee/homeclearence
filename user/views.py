@@ -211,6 +211,17 @@ def addItem(request):
         return redirect('dashboard')
     return render(request, 'addItem.html',{})
 
+def package(request):
+    user=request.user
+    if request.method == 'POST':
+        item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
+        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
+        image1=request.FILES['image1'],image2=request.FILES['image2'],image3=request.FILES['image3'],buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
+        category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
+        item.save()     #creating the item from the form atttributes
+        messages.success(request, 'Item Successfully Listed')
+        return redirect('dashboard')
+    return render(request, 'package.html',{})
 
 #dashboard Information for a authenticated user
 @login_required(login_url='login')
