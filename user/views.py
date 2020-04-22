@@ -214,9 +214,21 @@ def addItem(request):
 def package(request):
     user=request.user
     if request.method == 'POST':
+        if bool(request.FILES.get('image1', False)) == True:
+            image1=request.FILES['image1']
+        else:
+            image1=''
+        if bool(request.FILES.get('image2', False)) == True:
+            image2=request.FILES['image2']
+        else:
+            image2=''
+        if bool(request.FILES.get('image3', False)) == True:
+            image3=request.FILES['image3']
+        else:
+            image3=''
         item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
         location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
-        image1=request.FILES['image1'],image2=request.FILES['image2'],image3=request.FILES['image3'],buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
+        image1=image1,image2=image2,image3=image3,buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
         category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
         item.save()     #creating the item from the form atttributes
         messages.success(request, 'Item Successfully Listed')

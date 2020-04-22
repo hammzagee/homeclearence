@@ -23,19 +23,23 @@
       <div class="col-md-7">
         <img style="border-radius:5px;"class="img-fluid" src="{{item.image.url}}" width="475px" height="400px"  alt="" id="expandedImg" >
         <br><br><br>
-        {% if item.image1 and item.image2 and item.image3%}
         <div class="row">
+        {% if item.image1%}
           <div class="col-lg-3">
             <img style="border-radius:5px;"class="img-fluid" src="{{item.image1.url}}" width="150px" height="100px"alt="Nature" onclick="myFunction(this);">
           </div>
+          {% endif%}
+          {% if item.image2%}
           <div class="col-lg-3">
             <img style="border-radius:5px;"class="img-fluid" src="{{item.image2.url}}" width="150px" height="100px"alt="Snow" onclick="myFunction(this);">
           </div>
+          {% endif %}
+          {% if item.image3%}
           <div class="col-lg-3">
             <img style="border-radius:5px;"class="img-fluid" src="{{item.image3.url}}" width="150px" height="100px"alt="Snow" onclick="myFunction(this);">
           </div>
+          {% endif %}
         </div>
-        {% endif%}
       </div>
 
       <div style="background-color:#96d3ff;border-radius:5px;padding:20px;"class="col-md-5">
