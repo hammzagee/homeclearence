@@ -220,12 +220,13 @@ $(document).ready(function() {
     }
 
     function showPosition(position) {
-        var from = new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+        var from = new google.maps.LatLng(position.coords.latitude, position.coords.longitude) 
         var result = "";
         var count = 0;
         {% for item in items %}
             var to = new google.maps.LatLng({{item.lat}}, {{item.lng}});
             var distance = google.maps.geometry.spherical.computeDistanceBetween(from, to);
+            console.log(distance);
             dis = distance / 1609;
             if (dis <= 10) {
                 count += 1;

@@ -10,9 +10,10 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from datetime import date
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage   #for sending emails
 from django.contrib import messages
 from .models import *
+from django.utils.dateparse import parse_date
 
 
 def search(request):
@@ -43,12 +44,11 @@ def homeWithCategory(request, pk):
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filetr(category = pk).order_by('-views')
     else:
         items = Item.objects.filter(bidding = True).filter(category = pk).order_by('-views')
-    return render(request, 'home.html', {"items":items, "selected":pk})    #all the items that has bidding enabled
 
 def logout2(request):
     logout(request)
     items = Item.objects.filter(bidding = True)
-    return render(request, 'home.html', {"items":items})
+    return render(request, 'home.html', {"items":items})    #all the items that has bidding enabled
 
 
 def makeBid(request):
@@ -69,7 +69,6 @@ def makeBid(request):
                 'item':item,
             })
             mail_subject = 'You Bid on '+ item.title + 'was replaced'
-            print("im here")
             email = u.email
             _email = EmailMessage(mail_subject, bidreplace, to=[email])
             _email.send()
@@ -202,13 +201,18 @@ def buyNow(request):
 def addItem(request):
     user=request.user
     if request.method == 'POST':
-        item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
-        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
-        buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
-        category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
-        item.save()     #creating the item from the form atttributes
-        messages.success(request, 'Item Successfully Listed')
-        return redirect('dashboard')
+        bidding_end_data = request.POST.get('bidding_end_data')
+        print (bidding_end_data)
+        if  parse_date(bidding_end_data) <= date.today():
+            return render(request, 'addItem.html',{"message":"Please Select Correct Ending date"})
+        else:
+            item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
+            location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
+            buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
+            category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
+            item.save()     #creating the item from the form atttributes
+            messages.success(request, 'Item Successfully Listed')
+            return redirect('dashboard')
     return render(request, 'addItem.html',{})
 
 def package(request):
@@ -226,13 +230,16 @@ def package(request):
             image3=request.FILES['image3']
         else:
             image3=''
-        item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
-        location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
-        image1=image1,image2=image2,image3=image3,buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
-        category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
-        item.save()     #creating the item from the form atttributes
-        messages.success(request, 'Item Successfully Listed')
-        return redirect('dashboard')
+        if parse_date(bidding_end_data) <= date.today():
+            return render(request, 'addItem.html',{"message":"Please Select Correct Ending date"})
+        else:
+            item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
+            location=request.POST.get('location'),lat=request.POST.get('lat'), lng=request.POST.get('lng'), bidding=True, image=request.FILES['image'],
+            image1=image1,image2=image2,image3=image3,buyNow=request.POST.get('buyNow'), bidding_end_data=request.POST.get('bidding_end_data'),
+            category=request.POST.get('category'), usedLife=request.POST.get('usedLife'))
+            item.save()     #creating the item from the form atttributes
+            messages.success(request, 'Item Successfully Listed')
+            return redirect('dashboard')
     return render(request, 'package.html',{})
 
 #dashboard Information for a authenticated user

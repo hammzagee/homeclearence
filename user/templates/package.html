@@ -117,6 +117,31 @@
 
 <script>
   $(document).ready(function() {
+    {% if message%}
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-full-width",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+    toastr["error"]("Please Select Correct Ending Date", "Incorrect Input");
+    {%endif%}
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
     getLocation()
     $('#location').keyup(function(event) {
       var loc = $(this).val()
