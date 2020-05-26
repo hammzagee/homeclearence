@@ -8,18 +8,18 @@ Using the following command create virtual environment in the directory you crea
 In the same directory extract the zip of code.
 Activate virtual environment created in step 2 by using following command.
 
-source [environment name]/bin/activate.
+            source [environment name]/bin/activate.
 
 Install all the dependencies to run project successfully by using following command.
 
-pip install -r requirements.txt
+            pip install -r requirements.txt
 
 Run the server by using following command.
 
-python manage.py runserver 
+            python manage.py runserver 
 
-Now you can access web application in your browser on 127.0.0.1:8000/
+ Now you can access web application in your browser on 127.0.0.1:8000/
 
 
 Live server can be accessed by this link:
-Home clearance
+            http://clearence.herokuapp.com/
