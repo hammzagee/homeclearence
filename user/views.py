@@ -44,6 +44,7 @@ def homeWithCategory(request, pk):
         items = Item.objects.exclude(User_id = request.user.id).filter(bidding = True).filetr(category = pk).order_by('-views')
     else:
         items = Item.objects.filter(bidding = True).filter(category = pk).order_by('-views')
+    return render(request, 'home.html', {"items":items, "selected":"none"})
 
 def logout2(request):
     logout(request)
