@@ -203,7 +203,6 @@ def addItem(request):
     user=request.user
     if request.method == 'POST':
         bidding_end_data = request.POST.get('bidding_end_data')
-        print (bidding_end_data)
         if  parse_date(bidding_end_data) <= date.today():
             return render(request, 'addItem.html',{"message":"Please Select Correct Ending date"})
         else:
@@ -231,7 +230,7 @@ def package(request):
             image3=request.FILES['image3']
         else:
             image3=''
-        if parse_date(bidding_end_data) <= date.today():
+        if parse_date(request.POST.get('bidding_end_data')) <= date.today():
             return render(request, 'addItem.html',{"message":"Please Select Correct Ending date"})
         else:
             item = Item(User=user, title=request.POST.get('title'),description=request.POST.get('description'),starting_bid=request.POST.get('starting_bid'),
