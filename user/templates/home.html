@@ -51,10 +51,10 @@
           {% else%}
             <option value="Garden Furniture"> Garden Furniture</option>
           {% endif%}
-          {% if selected == "Other"%}
-            <option selected value="Other"> Other</option>
+          {% if selected == "Package"%}
+            <option selected value="Package"> Package</option>
           {% else%}
-            <option value="Other"> Other</option>
+            <option value="Package"> Package</option>
           {% endif%}
         </select>
     </div>
@@ -115,8 +115,8 @@ $(document).ready(function() {
     if (val == 'Garden Furniture') {
       window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Garden Furniture';
     }
-    if (val == 'Other') {
-      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Other';
+    if (val == 'Package') {
+      window.location.href='http://'+ window.location.host + '/' + 'homeWCategory' + '/' + 'Package';
     }
   });
 });
